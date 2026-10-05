@@ -221,7 +221,19 @@
 .footer-brand img { width: 39px; height: 39px; object-fit: cover; border-radius: 50%; }
 .footer-meta { color: rgba(233,229,213,.68); font-size: 12px; display: flex; gap: 24px; align-items: center; }
 .footer-note { font-size: 11px; color: rgba(233,229,213,.56); }
-.reveal { animation: appear .9s both; }
+.scroll-motion-enabled [data-scroll-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 24px, 0);
+  transition:
+    opacity 720ms cubic-bezier(.2, .65, .25, 1),
+    transform 820ms cubic-bezier(.2, .65, .25, 1);
+}
+.scroll-motion-enabled [data-scroll-reveal].is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+.scroll-motion-enabled .gallery-item[data-scroll-reveal]:nth-child(2) { transition-delay: 120ms; }
+.scroll-motion-enabled .gallery-item[data-scroll-reveal]:nth-child(3) { transition-delay: 240ms; }
 @keyframes appear { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes image-arrive { from { opacity: .72; transform: scale(1.035); } to { opacity: 1; transform: scale(1); } }
 @media (max-width: 760px) {
@@ -262,4 +274,5 @@
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  [data-scroll-reveal] { opacity: 1 !important; transform: none !important; }
 }

@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 const photos = {
   hero: '/images/coffee-and-sweets.jpg',
   dessert: '/images/signature-desserts.jpg',
@@ -6,7 +8,46 @@ const photos = {
   collection: '/images/saudi-collection.jpg',
 };
 
+function useScrollReveals() {
+  useEffect(() => {
+    const targets = document.querySelectorAll<HTMLElement>('[data-scroll-reveal]');
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches;
+
+    if (prefersReducedMotion || !('IntersectionObserver' in window)) {
+      return;
+    }
+
+    document.documentElement.classList.add('scroll-motion-enabled');
+
+    const observer = new IntersectionObserver(
+      (entries, activeObserver) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            activeObserver.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.14,
+        rootMargin: '0px 0px -48px 0px',
+      },
+    );
+
+    targets.forEach((target) => observer.observe(target));
+
+    return () => {
+      observer.disconnect();
+      document.documentElement.classList.remove('scroll-motion-enabled');
+    };
+  }, []);
+}
+
 function App() {
+  useScrollReveals();
+
   return (
     <main className="site-shell" dir="rtl" lang="ar">
       <header className="topbar">
@@ -38,15 +79,15 @@ function App() {
       </section>
 
       <section className="about section" id="story">
-        <span className="section-index">١ — الحكاية</span>
-        <div className="about-copy">
+        <span className="section-index" data-scroll-reveal>١ — الحكاية</span>
+        <div className="about-copy" data-scroll-reveal>
           <h2>من طيب الضيافة،<br />تبدأ الحكاية.</h2>
           <p>في مكرمل، نعتني بما يجعل اللحظة أطيب؛ مذاق متوازن، وصنعة متقنة، وتفاصيل تستلهم كرم الضيافة السعودية.</p>
         </div>
       </section>
 
       <section className="signature section" id="signature">
-        <div className="section-heading">
+        <div className="section-heading" data-scroll-reveal>
           <div>
             <span className="section-index">٢ — من مكرمل</span>
             <h2>تفاصيل تُصنع بعناية</h2>
@@ -54,15 +95,15 @@ function App() {
           <p>بين حلاوةٍ تُشارك، وقهوةٍ تُكمّل اللحظة.</p>
         </div>
         <div className="gallery">
-          <figure className="gallery-item">
+          <figure className="gallery-item" data-scroll-reveal>
             <div className="gallery-image"><img loading="lazy" src={photos.dessert} alt="تقديم حلويات مكرمل مع القهوة" /></div>
             <figcaption>حلويات <span>١ / ٣</span></figcaption>
           </figure>
-          <figure className="gallery-item">
+          <figure className="gallery-item" data-scroll-reveal>
             <div className="gallery-image"><img loading="lazy" src={photos.coffee} alt="قهوة مكرمل بتفاصيلها" /></div>
             <figcaption>قهوة <span>٢ / ٣</span></figcaption>
           </figure>
-          <figure className="gallery-item">
+          <figure className="gallery-item" data-scroll-reveal>
             <div className="gallery-image"><img loading="lazy" src={photos.collection} alt="مجموعة مكرمل بتفاصيل مستلهمة من الهوية السعودية" /></div>
             <figcaption>من روح المكان <span>٣ / ٣</span></figcaption>
           </figure>
@@ -71,10 +112,10 @@ function App() {
 
       <section className="experience" aria-labelledby="experience-title">
         <div className="experience-inner">
-          <div className="experience-photo">
+          <div className="experience-photo" data-scroll-reveal>
             <img src={photos.chocolate} alt="قهوة وقطع الشوكولاتة من مكرمل" />
           </div>
-          <div className="experience-copy">
+          <div className="experience-copy" data-scroll-reveal>
             <span className="section-index">٣ — التجربة</span>
             <h2 id="experience-title">تفاصيل صغيرة،<br />تصنع فرقًا كبيرًا.</h2>
             <p>من أول نظرة، حتى آخر رشفة؛ لكل تفصيل مكانه في لحظة مكرمل.</p>
@@ -83,23 +124,23 @@ function App() {
       </section>
 
       <section className="final-cta" id="contact">
-        <img src="/favicon.jpg" alt="" />
-        <h2>مكرمل، لأن التفاصيل تُذاق.</h2>
-        <p>نسعد بتواصلكم.</p>
-        <a href="#contact-note">تواصل معنا</a>
+        <img src="/favicon.jpg" alt="" data-scroll-reveal />
+        <h2 data-scroll-reveal>مكرمل، لأن التفاصيل تُذاق.</h2>
+        <p data-scroll-reveal>نسعد بتواصلكم.</p>
+        <a href="#contact-note" data-scroll-reveal>تواصل معنا</a>
       </section>
 
       <footer className="footer" id="contact-note">
-        <div className="footer-brand">
+        <div className="footer-brand" data-scroll-reveal>
           <img src="/favicon.jpg" alt="" />
           <span>مُكَرْمَل</span>
         </div>
-        <div className="footer-meta">
+        <div className="footer-meta" data-scroll-reveal>
           <span>Instagram</span>
           <span>التواصل</span>
           <span>المملكة العربية السعودية</span>
         </div>
-        <span className="footer-note">تُضاف روابط التواصل هنا</span>
+        <span className="footer-note" data-scroll-reveal>تُضاف روابط التواصل هنا</span>
       </footer>
     </main>
   );
