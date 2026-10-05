@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Mukarml Arabic Landing Page"
+description = "A premium, Arabic right-to-left landing page for Mukarml, a Saudi sweets and coffee brand, using the provided logo and editorial product photography."
+version = "1.0.0"
+id = "artifacts/mukarml-landing"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23630
+
+[services.development]
+run = "pnpm --filter @workspace/mukarml-landing run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/mukarml-landing", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/mukarml-landing/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23630"
+BASE_PATH = "/"

@@ -1,0 +1,5 @@
+{
+  "installCommand": "pnpm install --frozen-lockfile",
+  "buildCommand": "pnpm --filter @workspace/mukarml-landing run build",
+  "outputDirectory": "artifacts/mukarml-landing/dist/public"
+}
